@@ -1,0 +1,48 @@
+name: lol_stats_app
+description: League of Legends Stats App - USFQ Programación Avanzada en Apps
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+
+  # State Management
+  flutter_riverpod: ^2.4.9
+
+  # HTTP / API
+  dio: ^5.4.0
+
+  # Local Storage
+  shared_preferences: ^2.2.2
+
+  # Firebase
+  firebase_core: ^2.27.0
+  cloud_firestore: ^4.15.0
+
+  # Charts
+  fl_chart: ^0.66.0
+
+  # Images
+  cached_network_image: ^3.3.0
+
+  # Utils
+  intl: ^0.19.0
+
+  # ML (cuando se implemente)
+  # tflite_flutter: ^0.10.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/

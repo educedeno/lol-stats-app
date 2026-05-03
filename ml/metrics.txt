@@ -1,0 +1,18 @@
+Best model: Gradient Boosting
+Accuracy:   0.7181
+ROC AUC:    0.7950
+
+Confusion matrix:
+               Pred Red   Pred Blue
+  Real Red          706        284
+  Real Blue         273        713
+
+              precision    recall  f1-score   support
+
+    Red wins       0.72      0.71      0.72       990
+   Blue wins       0.72      0.72      0.72       986
+
+    accuracy                           0.72      1976
+   macro avg       0.72      0.72      0.72      1976
+weighted avg       0.72      0.72      0.72      1976
+
