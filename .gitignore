@@ -53,3 +53,6 @@ ml/.venv/
 ml/__pycache__/
 ml/*.joblib
 
+# Claude Code local config
+.claude/
+
