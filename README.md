@@ -1,102 +1,71 @@
 # LoL Stats App
 
-**USFQ - Programación Avanzada en Apps**
-Proyecto final - Flutter + Dart
+App de estadísticas de League of Legends construida en Flutter, con un modelo
+de Machine Learning que predice el resultado de las partidas usando el estado
+del minuto 10.
 
-App móvil de estadísticas de League of Legends con tema visual estilo cliente del juego.
+Proyecto de **Programación Avanzada en Apps — USFQ**.
 
----
+## ¿Qué hace?
 
-## Cómo correr el proyecto
+- 🔍 **Buscar invocadores** por Riot ID (`Nombre#TAG`) usando la Riot API.
+- 📊 **Ver estadísticas**: nivel, ranked, historial de partidas, mastery de campeones.
+- ⭐ **Guardar favoritos** y búsquedas recientes (sincronizado en Firebase Firestore).
+- 🤖 **Win Predictor (ML)**: descarga las últimas 5 partidas y predice si el jugador
+  iba a ganar basándose en el estado del minuto 10. Compara la predicción con el
+  resultado real y muestra cuántas acertó.
 
-```bash
-flutter pub get
-flutter run
-```
+El modelo es un **Random Forest** entrenado con scikit-learn sobre el dataset
+público *High Diamond Ranked Games (10 min)* de Kaggle, y exportado a Dart con
+m2cgen para que corra dentro de la app sin servidores.
 
-> **Nota:** La app funciona en modo MOCK por defecto, sin necesidad de API key.
-> Los datos son generados aleatoriamente para demostración.
+## Plataformas
 
-### Para usar la API real de Riot
+Funciona en **Windows desktop**, **Web** y **Android** (la web tiene limitación
+de CORS para llamadas a la Riot API, así que la experiencia recomendada es
+Windows).
 
-1. Obtener una API key en https://developer.riotgames.com
-2. Editar `lib/data/api/riot_api_service.dart`:
-   ```dart
-   static const bool MOCK_MODE = false;
-   static const String API_KEY = 'RGAPI-tu-key-aqui';
+## Cómo correrla
+
+### Requisitos
+
+- [Flutter](https://docs.flutter.dev/get-started/install) 3.10+
+- API Key de Riot — sacar en [developer.riotgames.com](https://developer.riotgames.com)
+  (caduca cada 24h)
+
+### Pasos
+
+1. Clona el repo:
+   ```bash
+   git clone https://github.com/educedeno/lol-stats-app.git
+   cd lol-stats-app
    ```
-3. Implementar las llamadas HTTP reales (los endpoints están comentados en el archivo).
 
----
+2. Instala dependencias:
+   ```bash
+   flutter pub get
+   ```
 
-## Estructura del proyecto
+3. Crea tu archivo `run.bat` copiando la plantilla:
+   ```bash
+   copy run.bat.example run.bat
+   ```
+   Y abre `run.bat` para reemplazar `RGAPI-tu-key-aqui` por tu API key real.
 
-```
-lib/
-├── main.dart
-├── core/
-│   ├── constants/      → Colores, strings, sizes
-│   ├── theme/          → Tema dark estilo LoL
-│   └── providers/      → Providers globales de Riverpod
-├── data/
-│   ├── api/            → Riot API service (con mocks)
-│   ├── db/             → SQLite (favoritos, recientes)
-│   └── models/         → Summoner, Match, Champion
-├── features/
-│   ├── search/         → Pantalla de búsqueda
-│   ├── profile/        → Perfil del invocador
-│   ├── match_history/  → Historial de partidas
-│   ├── stats/          → Gráficos con fl_chart
-│   ├── favorites/      → Lista de favoritos
-│   └── ai_recommender/ → Sección de IA (TODO)
-└── shared/
-    └── widgets/        → MainNavigation
-```
+4. Ejecuta la app:
+   ```bash
+   .\run.bat
+   ```
 
----
+## Pipeline de ML (opcional)
 
-## Cumplimiento de requisitos del proyecto
+Si quieres re-entrenar el modelo desde cero, todo está en la carpeta `ml/`.
+Ver [`ml/README.md`](ml/README.md) para los pasos.
 
-| # | Requisito | Implementación |
-|---|-----------|---------------|
-| 1 | API pública | Riot Games API + datos mock para demostración |
-| 2 | Base de datos local | SQLite con `sqflite` (favoritos + búsquedas recientes) |
-| 3 | Manejo de estados | Riverpod (`StateNotifier`, `FutureProvider`) |
-| 4 | Imágenes + multimedia | `cached_network_image` para CDN de Riot + gráficos `fl_chart` |
-| 5 | Diseño atractivo | Tema oscuro con paleta LoL (dorado, cyan, rojo/verde para victoria/derrota) |
-| 6 | IA / ML | **Estructura preparada** - implementación pendiente (ver `lib/features/ai_recommender/`) |
+## Stack
 
----
-
-## Próximo paso: implementar el modelo de IA
-
-La sección de AI Coach ya está estructurada en la app. Lo que falta:
-
-1. **Recolectar datos**: extraer ~5000 partidas de la API de Riot, etiquetadas por rol.
-2. **Entrenar modelo**: usar scikit-learn (Python) para entrenar un Random Forest que clasifique el rol jugado a partir de stats (CS/min, daño, visión, KDA).
-3. **Exportar a TFLite**: convertir el modelo entrenado a `.tflite`.
-4. **Integrar en Flutter**: usar el paquete `tflite_flutter` para correr inferencia en el dispositivo.
-
-El placeholder de la pantalla `AIScreen` ya muestra esta roadmap.
-
----
-
-## Pantallas
-
-- **Search**: búsqueda por GameName#TAG, búsquedas recientes, ejemplos rápidos.
-- **Profile**: ícono, nivel, rangos (Solo/Flex), top 5 campeones por maestría.
-- **Match History**: últimas 20 partidas con KDA, CS, oro, daño y visión.
-- **Stats**: 3 gráficos con fl_chart - winrate por campeón, KDA en el tiempo, distribución de roles.
-- **Favorites**: invocadores guardados localmente (SQLite).
-- **AI Coach**: estructura para clasificador de rol, recomendador y predictor de victoria.
-
----
-
-## Dependencias principales
-
-- `flutter_riverpod` - manejo de estado
-- `sqflite` + `path` - base de datos local
-- `dio` - cliente HTTP
-- `cached_network_image` - cacheo de imágenes
-- `fl_chart` - gráficos (barras, líneas, torta)
-- `tflite_flutter` (pendiente) - inferencia de modelos ML
+- **Flutter** + **Riverpod** (state management)
+- **Dio** (HTTP client)
+- **Firebase Firestore** (almacenamiento)
+- **scikit-learn** + **m2cgen** (modelo ML)
+- **Riot Games API** + **Data Dragon** (datos de LoL)
