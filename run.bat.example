@@ -1,0 +1,5 @@
+@echo off
+REM Copia este archivo a "run.bat" y reemplaza la key con la tuya
+REM (sacala en https://developer.riotgames.com).
+REM run.bat esta en .gitignore para no exponer la key en el repo.
+flutter run -d windows --dart-define=RIOT_API_KEY=RGAPI-tu-key-aqui
